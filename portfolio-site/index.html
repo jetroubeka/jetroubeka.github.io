@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Jade ETROUBEKA | BTS SIO SISR</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Exo+2:wght@200;300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan: #00ffe5;
+    --cyan-dim: #00bfa8;
+    --cyan-dark: #003d36;
+    --bg: #060810;
+    --bg2: #0a0d17;
+    --bg3: #0e1220;
+    --card: #0d1018;
+    --border: rgba(0,255,229,0.15);
+    --border-strong: rgba(0,255,229,0.4);
+    --text: #c8d8e8;
+    --text-dim: #5a7a8a;
+    --white: #eef4ff;
+    --red: #ff3a5c;
+    --amber: #ffb300;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* SCANLINES OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* GRID BACKGROUND */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,229,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,229,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 3rem;
+    height: 60px;
+    background: rgba(6,8,16,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    color: var(--cyan);
+    letter-spacing: 3px;
+  }
+
+  .nav-logo span { color: var(--text-dim); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.3s;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--cyan);
+    transition: width 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 3rem;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: 50%; left: 20%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,255,229,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    max-width: 700px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--cyan);
+    letter-spacing: 4px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 30px; height: 1px;
+    background: var(--cyan);
+  }
+
+  .hero-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(48px, 7vw, 88px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 0.95;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-name .cyan { color: var(--cyan); }
+
+  .hero-role {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    color: var(--cyan-dim);
+    letter-spacing: 3px;
+    margin-bottom: 2rem;
+    padding-left: 2px;
+  }
+
+  .hero-desc {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+    border-left: 2px solid var(--border-strong);
+    padding-left: 1.5rem;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 28px;
+    background: var(--cyan);
+    color: var(--bg);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: var(--white);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 11px 28px;
+    background: transparent;
+    color: var(--cyan);
+    border: 1px solid var(--border-strong);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(0,255,229,0.07);
+    transform: translateY(-2px);
+  }
+
+  /* HERO SIDE PANEL */
+  .hero-panel {
+    position: absolute;
+    right: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 2;
+  }
+
+  .panel-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    min-width: 160px;
+    position: relative;
+  }
+
+  .panel-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--cyan);
+  }
+
+  .panel-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .panel-value {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cyan);
+  }
+
+  .panel-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  /* SECTIONS */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--cyan);
+    letter-spacing: 2px;
+  }
+
+  .section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* DIVIDER */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+    margin: 0 3rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* CV SECTION */
+  .cv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .cv-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cv-block::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 60px; height: 60px;
+    border-top: 1px solid var(--border-strong);
+    border-right: 1px solid var(--border-strong);
+  }
+
+  .cv-block-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cyan);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cv-block-title::before {
+    content: '';
+    display: block;
+    width: 18px; height: 2px;
+    background: var(--cyan);
+  }
+
+  .cv-item {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cv-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .cv-date {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--cyan);
+    min-width: 60px;
+    padding-top: 3px;
+    letter-spacing: 1px;
+  }
+
+  .cv-info h4 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 3px;
+  }
+
+  .cv-info p {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    padding: 2px 8px;
+    border: 1px solid var(--border-strong);
+    color: var(--cyan);
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .skill-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    transition: border-color 0.3s, transform 0.2s;
+    position: relative;
+  }
+
+  .skill-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-3px);
+  }
+
+  .skill-icon {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
+    color: var(--cyan);
+    margin-bottom: 10px;
+  }
+
+  .skill-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .skill-level {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .skill-bar-bg {
+    width: 100%;
+    height: 2px;
+    background: var(--border);
+  }
+
+  .skill-bar-fill {
+    height: 100%;
+    background: var(--cyan);
+    transition: width 1s ease;
+  }
+
+  /* SITUATIONS */
+  .situations-placeholder {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-style: dashed;
+    padding: 3rem;
+    text-align: center;
+  }
+
+  .placeholder-icon {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 32px;
+    color: var(--border-strong);
+    margin-bottom: 1rem;
+  }
+
+  .placeholder-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+  }
+
+  .placeholder-sub {
+    font-size: 13px;
+    color: var(--text-dim);
+    opacity: 0.6;
+  }
+
+  .situations-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .situation-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    transition: border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .situation-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 2px;
+    background: var(--cyan);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+    transform-origin: left;
+  }
+
+  .situation-card:hover { border-color: var(--border-strong); }
+  .situation-card:hover::before { transform: scaleX(1); }
+
+  .sit-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  .sit-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .sit-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .sit-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .sit-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  /* VEILLE */
+  .veille-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .veille-main {
+    background: var(--card);
+    border: 1px solid var(--border-strong);
+    padding: 2rem;
+    position: relative;
+  }
+
+  .veille-main::before {
+    content: 'VEILLE ACTIVE';
+    position: absolute;
+    top: -1px; right: 20px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    background: var(--cyan);
+    color: var(--bg);
+    padding: 2px 10px;
+    letter-spacing: 2px;
+  }
+
+  .veille-topic {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+
+  .veille-topic span { color: var(--cyan); }
+
+  .veille-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .veille-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .veille-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    padding: 4px 12px;
+    border: 1px solid var(--border-strong);
+    color: var(--cyan);
+    letter-spacing: 1px;
+  }
+
+  .veille-placeholder {
+    background: var(--card);
+    border: 1px dashed var(--border);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .veille-placeholder-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    line-height: 2;
+  }
+
+  /* COMPETENCES BLOC */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .comp-table th {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    text-align: left;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border-strong);
+    text-transform: uppercase;
+  }
+
+  .comp-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr:hover td { background: rgba(0,255,229,0.03); }
+
+  .comp-code {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--cyan);
+    letter-spacing: 1px;
+  }
+
+  .comp-status {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+  }
+
+  .comp-status.ok { background: var(--cyan); }
+
+  /* CONTACT */
+  .contact-section {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .contact-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 5rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .contact-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .contact-title span { color: var(--cyan); }
+
+  .contact-sub {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+
+  .contact-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    transition: border-color 0.3s;
+  }
+
+  .contact-item:hover { border-color: var(--border-strong); }
+
+  .contact-item-icon {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    color: var(--cyan);
+    min-width: 24px;
+  }
+
+  .contact-item-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .contact-item-value {
+    font-size: 14px;
+    color: var(--white);
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem 3rem;
+    border-top: 1px solid var(--border);
+  }
+
+  footer p {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+
+  footer span { color: var(--cyan); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-content > * {
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.4s; }
+  .hero-content > *:nth-child(5) { animation-delay: 0.5s; }
+
+  /* BLINK */
+  @keyframes blink { 50% { opacity: 0; } }
+  .cursor { animation: blink 1s step-end infinite; color: var(--cyan); }
+
+  /* CORNER DECORATION */
+  .corner-tl, .corner-br {
+    position: absolute;
+    width: 20px; height: 20px;
+  }
+  .corner-tl { top: 0; left: 0; border-top: 1px solid var(--cyan); border-left: 1px solid var(--cyan); }
+  .corner-br { bottom: 0; right: 0; border-bottom: 1px solid var(--cyan); border-right: 1px solid var(--cyan); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 0 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 5rem 1.5rem 3rem; }
+    .hero-panel { display: none; }
+    section { padding: 3rem 1.5rem; }
+    .cv-grid, .skills-grid, .situations-grid, .veille-content, .contact-inner { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+
+  .btn-rapport {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 10px 18px;
+    background: transparent;
+    color: var(--cyan);
+    border: 1px solid var(--border-strong);
+    text-decoration: none;
+    margin-top: 1rem;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .btn-rapport:hover {
+    background: rgba(0,255,229,0.08);
+    transform: translateY(-2px);
+  }
+
+  .sit-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 1rem;
+    cursor: pointer;
+  }
+  .sit-gallery img {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .sit-gallery img:hover { opacity: 0.85; transform: scale(1.02); }
+  .sit-gallery img:first-child:nth-last-child(1) { grid-column: 1 / -1; height: 160px; }
+
+  /* Lightbox */
+  .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:9998; align-items:center; justify-content:center; }
+  .lightbox.active { display:flex; }
+  .lightbox img { max-width:90vw; max-height:88vh; border:1px solid var(--border-strong); }
+  .lightbox-close { position:absolute; top:20px; right:30px; font-family:'Share Tech Mono',monospace; font-size:20px; color:var(--cyan); cursor:pointer; z-index:9999; }
+</style>
+</head>
+<body>
+
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close">[X] FERMER</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">J<span>.</span>ETROUBEKA</div>
+  <ul class="nav-links">
+    <li><a href="#cv">CV</a></li>
+    <li><a href="#competences">Compétences</a></li>
+    <li><a href="#situations">Situations Pro</a></li>
+    <li><a href="#veille">Veille</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-status">
+    <div class="status-dot"></div>
+    BTS SIO — SISR
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+
+  <div class="hero-content">
+    <div class="hero-tag">PORTFOLIO NUMÉRIQUE — BTS SIO</div>
+    <div class="hero-name">
+      JADE<br><span class="cyan">ETROUBEKA</span>
+    </div>
+    <div class="hero-role">// OPTION SISR — ADMINISTRATION RÉSEAU &amp; SÉCURITÉ</div>
+    <p class="hero-desc">
+      Étudiante en BTS Services Informatiques aux Organisations au Lycée Léonard de Vinci à Melun. 
+      Passionnée par l'administration réseau et les systèmes. En route vers une carrière 
+      d'administratrice réseau.
+    </p>
+    <div class="hero-ctas">
+      <a href="#situations" class="btn-primary">Voir mes réalisations</a>
+      <a href="#cv" class="btn-secondary">Mon parcours</a>
+    </div>
+  </div>
+
+  <div class="hero-panel">
+    <div class="panel-card">
+      <div class="corner-tl"></div>
+      <div class="corner-br"></div>
+      <div class="panel-label">Formation</div>
+      <div class="panel-value">1ère</div>
+      <div class="panel-sub">Année BTS SIO</div>
+    </div>
+    <div class="panel-card">
+      <div class="corner-tl"></div>
+      <div class="corner-br"></div>
+      <div class="panel-label">Option</div>
+      <div class="panel-value">SISR</div>
+      <div class="panel-sub">Réseau &amp; Systèmes</div>
+    </div>
+    <div class="panel-card">
+      <div class="corner-tl"></div>
+      <div class="corner-br"></div>
+      <div class="panel-label">Lycée</div>
+      <div class="panel-value" style="font-size:14px;">LÉONARD DE VINCI</div>
+      <div class="panel-sub">Établissement</div>
+    </div>
+    <div class="panel-card">
+      <div class="corner-tl"></div>
+      <div class="corner-br"></div>
+      <div class="panel-label">Statut</div>
+      <div class="panel-value" style="font-size:12px; color: var(--amber);">STAGE</div>
+      <div class="panel-sub">À venir</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CV -->
+<section id="cv">
+  <div class="section-header">
+    <span class="section-num">01 //</span>
+    <h2 class="section-title">Présentation personnelle</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="cv-grid">
+    <!-- Formation -->
+    <div class="cv-block">
+      <div class="cv-block-title">Formation</div>
+      <div class="cv-item">
+        <div class="cv-date">2026<br>→ 2027</div>
+        <div class="cv-info">
+          <h4>BTS SIO — Option SISR (1ère année — redoublement)</h4>
+          <p>Lycée Léonard de Vinci — Melun<br>Services Informatiques aux Organisations<br>Solutions d'Infrastructure, Systèmes et Réseaux</p>
+          <span class="badge">EN COURS</span>
+        </div>
+      </div>
+      <div class="cv-item">
+        <div class="cv-date">2025<br>→ 2026</div>
+        <div class="cv-info">
+          <h4>BTS SIO — Option SISR (1ère année)</h4>
+          <p>Lycée Mathias — Chalon-sur-Saône<br>Services Informatiques aux Organisations<br>Solutions d'Infrastructure, Systèmes et Réseaux</p>
+          <span class="badge" style="border-color: var(--amber); color: var(--amber);">ANNÉE VALIDÉE</span>
+        </div>
+      </div>
+      <div class="cv-item">
+        <div class="cv-date">2024<br>→ 2025</div>
+        <div class="cv-info">
+          <h4>Terminale Bac Pro SN</h4>
+          <p>Lycée Jacques Prévert — Combs-la-Ville<br>Systèmes Numériques</p>
+          <span class="badge">BAC PRO OBTENU</span>
+        </div>
+      </div>
+      <div class="cv-item">
+        <div class="cv-date">2023<br>→ 2024</div>
+        <div class="cv-info">
+          <h4>Première Bac Pro SN</h4>
+          <p>Lycée Jacques Prévert — Combs-la-Ville<br>Systèmes Numériques</p>
+        </div>
+      </div>
+      <div class="cv-item">
+        <div class="cv-date">2022<br>→ 2023</div>
+        <div class="cv-info">
+          <h4>Seconde Bac Pro SN</h4>
+          <p>Lycée Jacques Prévert — Combs-la-Ville<br>Systèmes Numériques</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Présentation -->
+    <div class="cv-block">
+      <div class="cv-block-title">À propos</div>
+      <div style="margin-bottom: 1.5rem;">
+        <p style="font-size:14px; color: var(--text); line-height: 1.9;">
+          Je suis Jade ETROUBEKA, étudiante en première année de BTS SIO option SISR au Lycée Léonard de Vinci. 
+          Mon objectif professionnel est de devenir <strong style="color: var(--cyan);">administratrice réseau</strong>.
+        </p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border);">
+          <span style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 1px;">OBJECTIF</span>
+          <span style="font-size: 13px; color: var(--cyan);">Administratrice Réseau</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border);">
+          <span style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 1px;">ÉTABLISSEMENT</span>
+          <span style="font-size: 13px; color: var(--white);">Lycée Léonard de Vinci — Melun</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border);">
+          <span style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 1px;">DOMAINE</span>
+          <span style="font-size: 13px; color: var(--white);">Réseau &amp; Sécurité</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+          <span style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 1px;">STAGE</span>
+          <span style="font-size: 13px; color: var(--cyan);">Ozitem — 18/05 → 28/06</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMPETENCES -->
+<section id="competences">
+  <div class="section-header">
+    <span class="section-num">02 //</span>
+    <h2 class="section-title">Compétences</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-icon">[NET]</div>
+      <div class="skill-name">Réseaux</div>
+      <div class="skill-level">En apprentissage</div>
+      <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 40%"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">[SYS]</div>
+      <div class="skill-name">Systèmes</div>
+      <div class="skill-level">En apprentissage</div>
+      <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 40%"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">[SEC]</div>
+      <div class="skill-name">Sécurité</div>
+      <div class="skill-level">En apprentissage</div>
+      <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 30%"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">[LNX]</div>
+      <div class="skill-name">Linux</div>
+      <div class="skill-level">En apprentissage</div>
+      <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 35%"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">[WIN]</div>
+      <div class="skill-name">Windows Server</div>
+      <div class="skill-level">En apprentissage</div>
+      <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 35%"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">[DOC]</div>
+      <div class="skill-name">Documentation</div>
+      <div class="skill-level">En apprentissage</div>
+      <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 50%"></div></div>
+    </div>
+  </div>
+
+  <div style="background: var(--card); border: 1px dashed var(--border); padding: 1.5rem; text-align: center; margin-top: 1rem;">
+    <p style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: 2px;">
+      // COMPÉTENCES À COMPLÉTER AU FIL DE LA FORMATION ET DU STAGE
+    </p>
+  </div>
+
+  <div style="margin-top: 3rem;">
+    <div style="font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 600; color: var(--cyan); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.5rem;">Référentiel de compétences — Bloc 1 &amp; Bloc 2</div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Compétence</th>
+          <th>Bloc</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="comp-code">B1.1</td>
+          <td>Gérer le patrimoine informatique</td>
+          <td><span class="badge">BLOC 1</span></td>
+          <td><span class="comp-status"></span></td>
+        </tr>
+        <tr>
+          <td class="comp-code">B1.2</td>
+          <td>Répondre aux incidents et aux demandes d'assistance</td>
+          <td><span class="badge">BLOC 1</span></td>
+          <td><span class="comp-status"></span></td>
+        </tr>
+        <tr>
+          <td class="comp-code">B1.3</td>
+          <td>Développer la présence en ligne de l'organisation</td>
+          <td><span class="badge">BLOC 1</span></td>
+          <td><span class="comp-status"></span></td>
+        </tr>
+        <tr>
+          <td class="comp-code">B1.4</td>
+          <td>Travailler en mode projet</td>
+          <td><span class="badge">BLOC 1</span></td>
+          <td><span class="comp-status"></span></td>
+        </tr>
+        <tr>
+          <td class="comp-code">B2.1</td>
+          <td>Concevoir une solution d'infrastructure réseau</td>
+          <td><span class="badge" style="border-color: var(--cyan); color: var(--cyan);">BLOC 2</span></td>
+          <td><span class="comp-status"></span></td>
+        </tr>
+        <tr>
+          <td class="comp-code">B2.2</td>
+          <td>Installer, tester et déployer une solution d'infrastructure</td>
+          <td><span class="badge" style="border-color: var(--cyan); color: var(--cyan);">BLOC 2</span></td>
+          <td><span class="comp-status"></span></td>
+        </tr>
+        <tr>
+          <td class="comp-code">B2.3</td>
+          <td>Exploiter, dépanner et superviser une infrastructure</td>
+          <td><span class="badge" style="border-color: var(--cyan); color: var(--cyan);">BLOC 2</span></td>
+          <td><span class="comp-status"></span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="display: flex; gap: 1.5rem; margin-top: 1rem; font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim);">
+      <span><span class="comp-status ok" style="display:inline-block; margin-right: 6px;"></span>Maîtrisé</span>
+      <span><span class="comp-status" style="display:inline-block; margin-right: 6px;"></span>En cours</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SITUATIONS PRO -->
+<section id="situations">
+  <div class="section-header">
+    <span class="section-num">03 //</span>
+    <h2 class="section-title">Situations Professionnelles</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="situations-grid">
+
+    <div class="situation-card">
+
+      <div class="sit-gallery" style="grid-template-columns:1fr 1fr 1fr;">
+        <img src="assets/images/img-01-0734f642bb.png" alt="Voy'Mathias - Accueil hero" onclick="openLightbox(this)">
+        <img src="assets/images/img-02-855593b5cc.png" alt="Voy'Mathias - Destinations" onclick="openLightbox(this)">
+        <img src="assets/images/img-03-74498c1b8c.png" alt="Voy'Mathias - Formulaire" onclick="openLightbox(this)">
+        <img src="assets/images/img-04-20049214a5.png" alt="Voy'Mathias - Liste séjours" onclick="openLightbox(this)">
+        <img src="assets/images/img-05-75e205998b.png" alt="Voy'Mathias - Séjours suite" onclick="openLightbox(this)">
+        <img src="assets/images/img-06-b47dbe5ddb.png" alt="Voy'Mathias - Séjours fin" onclick="openLightbox(this)">
+      </div>
+      <div class="sit-num">// SITUATION_01 — ATELIER DE PROFESSIONNALISATION</div>
+      <div class="sit-title">Voy'Mathias — Site web d'agence de voyage</div>
+      <div class="sit-desc">
+        Développement complet d'un site web pour l'agence de voyage fictive <strong style="color:var(--cyan)">Voy'Mathias</strong> 
+        dans le cadre d'un atelier de professionnalisation. Le site permet de consulter des séjours en Europe, 
+        de choisir une date de départ et de s'inscrire via un formulaire connecté à une base de données MySQL.
+        <br><br>
+        <span style="color:var(--text-dim); font-size:12px;">
+        — Page d'accueil avec affichage dynamique des séjours depuis la BDD<br>
+        — Page séjours avec système de filtres (pays, durée, recherche textuelle)<br>
+        — Page départs avec dates et prix récupérés dynamiquement<br>
+        — Formulaire d'inscription avec validation, insertion en BDD et gestion RGPD<br>
+        — Connexion sécurisée à MySQL via PDO avec gestion des exceptions
+        </span>
+      </div>
+      <div class="sit-tags">
+        <span class="sit-tag">HTML</span>
+        <span class="sit-tag">CSS</span>
+        <span class="sit-tag">PHP</span>
+        <span class="sit-tag">MySQL</span>
+        <span class="sit-tag">PDO</span>
+        <span class="sit-tag">RGPD</span>
+        <span class="sit-tag">ATELIER PRO</span>
+        <span class="sit-tag">B1.3</span>
+      </div>
+    </div>
+
+    <div class="situation-card">
+
+      <div class="sit-gallery" style="grid-template-columns:1fr 1fr 1fr;">
+        <img src="assets/images/img-07-994f1a3abe.png" alt="Doc'Mathias - Accueil" onclick="openLightbox(this)">
+        <img src="assets/images/img-08-b2e08c3a98.png" alt="Doc'Mathias - Equipe médicale" onclick="openLightbox(this)">
+        <img src="assets/images/img-09-bd3c7c6772.png" alt="Doc'Mathias - Espace patient" onclick="openLightbox(this)">
+        <img src="assets/images/img-10-c64f9375f3.png" alt="Doc'Mathias - Planning patient" onclick="openLightbox(this)">
+        <img src="assets/images/img-11-e0ce679d5e.png" alt="Doc'Mathias - Dashboard admin" onclick="openLightbox(this)">
+        <img src="assets/images/img-12-3abaec6eee.png" alt="Doc'Mathias - Planning médecin" onclick="openLightbox(this)">
+        <img src="assets/images/img-13-6bd18d48d1.png" alt="Doc'Mathias - Profil médecin" onclick="openLightbox(this)">
+      </div>
+      <div class="sit-num">// SITUATION_02 — ATELIER DE PROFESSIONNALISATION</div>
+      <div class="sit-title">Doc'Mathias — Plateforme médicale de prise de rendez-vous</div>
+      <div class="sit-desc">
+        Développement d'une application web médicale complète <strong style="color:var(--cyan)">Doc'Mathias</strong> 
+        permettant la gestion de rendez-vous entre patients et médecins, avec un système multi-rôles 
+        (patient, médecin, administrateur) et une interface adaptée à chaque profil.
+        <br><br>
+        <span style="color:var(--text-dim); font-size:12px;">
+        — Système d'authentification sécurisé avec sessions PHP et hachage des mots de passe<br>
+        — Espace patient : profil, prise de RDV, historique, annulation de rendez-vous<br>
+        — Espace médecin : gestion du planning, créneaux bloqués, agenda sur 2 semaines<br>
+        — Espace administrateur : gestion des médecins, spécialités et statistiques<br>
+        — Connexion BDD sécurisée via PDO natif (requêtes préparées, gestion d'erreurs, fetch associatif)<br>
+        — Formulaire d'inscription avec validation et insertion sécurisée en BDD<br>
+        — Respect des bonnes pratiques RGPD sur les données personnelles de santé
+        </span>
+      </div>
+      <div class="sit-tags">
+        <span class="sit-tag">HTML</span>
+        <span class="sit-tag">CSS</span>
+        <span class="sit-tag">PHP</span>
+        <span class="sit-tag">MySQL</span>
+        <span class="sit-tag">PDO</span>
+        <span class="sit-tag">Sessions</span>
+        <span class="sit-tag">Multi-rôles</span>
+        <span class="sit-tag">RGPD</span>
+        <span class="sit-tag">ATELIER PRO</span>
+        <span class="sit-tag">B1.3</span>
+        <span class="sit-tag">B1.4</span>
+      </div>
+      <a class="btn-rapport" href="assets/docs/doc-01-a122b1ebcb.pdf" download="rapport_docmathias.pdf">
+        [PDF] TÉLÉCHARGER LE RAPPORT DE PROJET ↓
+      </a>
+    </div>
+
+    <div class="situation-card" style="opacity: 0.4; pointer-events: none;">
+      <div class="sit-num">// SITUATION_03 — À VENIR</div>
+      <div class="sit-title">Prochaine situation professionnelle</div>
+      <div class="sit-desc">Ta prochaine situation professionnelle apparaîtra ici.</div>
+      <div class="sit-tags">
+        <span class="sit-tag">À COMPLÉTER</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: 2rem; background: var(--card); border: 1px solid var(--border); padding: 1.5rem 2rem;">
+    <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--cyan); letter-spacing: 2px; margin-bottom: 10px;">// SYNTHÈSE DES COMPÉTENCES MOBILISÉES</div>
+    <p style="font-size: 13px; color: var(--text-dim); line-height: 1.8;">
+      Ce tableau de synthèse sera complété avec les compétences du Bloc 1 (Support et mise à disposition de services informatiques) 
+      et du Bloc 2 (Solutions d'infrastructure, systèmes et réseaux) mobilisées dans chaque situation.
+    </p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- VEILLE TECHNO -->
+<section id="veille">
+  <div class="section-header">
+    <span class="section-num">04 //</span>
+    <h2 class="section-title">Veille Technologique</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="veille-content">
+    <div class="veille-main">
+      <div class="veille-topic">Administration <span>Réseau</span></div>
+      <p class="veille-desc">
+        Ma veille technologique porte sur l'administration réseau, domaine dans lequel je souhaite évoluer professionnellement. 
+        Je suis les évolutions des protocoles, des architectures réseau, des outils de supervision et des bonnes pratiques 
+        en matière de sécurité des infrastructures.
+      </p>
+      <div class="veille-tags">
+        <span class="veille-tag">PROTOCOLES TCP/IP</span>
+        <span class="veille-tag">ROUTAGE</span>
+        <span class="veille-tag">VLANS</span>
+        <span class="veille-tag">SÉCURITÉ RÉSEAU</span>
+        <span class="veille-tag">SUPERVISION</span>
+        <span class="veille-tag">CISCO</span>
+      </div>
+    </div>
+
+    <div class="veille-placeholder">
+      <div style="font-family: 'Share Tech Mono', monospace; font-size: 28px; color: var(--border-strong);">[RSS]</div>
+      <div class="veille-placeholder-text">
+        // SOURCES DE VEILLE<br>
+        À compléter :<br>
+        — Sites spécialisés<br>
+        — Blogs techniques<br>
+        — Newsletters<br>
+        — Réseaux professionnels
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 2rem; background: var(--card); border: 1px solid var(--border); padding: 2rem;">
+    <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--cyan); letter-spacing: 2px; margin-bottom: 1rem;">// JURIDIQUE — ASPECTS LÉGAUX DE L'INFORMATIQUE</div>
+    <p style="font-size: 13px; color: var(--text-dim); line-height: 1.8;">
+      La veille juridique comprend le suivi des réglementations liées à l'informatique : RGPD, cybersécurité, 
+      responsabilité des administrateurs système. Cette section sera enrichie au fil de la formation.
+    </p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div class="contact-section">
+  <div class="contact-inner" id="contact">
+    <div>
+      <div class="contact-title">PRENDRE<br><span>CONTACT</span></div>
+      <p class="contact-sub">
+        Disponible pour des échanges professionnels,<br>
+        des opportunités de stage ou toute collaboration.
+      </p>
+      <div class="hero-ctas" style="margin-top: 1.5rem;">
+        <a href="assets/docs/doc-02-3daad91e41.pdf" download="CV_Jade_Etroubeka.pdf" class="btn-primary">↓ Télécharger mon CV</a>
+        <a href="assets/docs/doc-03-1d8240295e.pdf" download="Lettre_Motivation_Jade_Etroubeka.pdf" class="btn-secondary">↓ Lettre de motivation</a>
+      </div>
+    </div>
+    <div class="contact-items">
+      <div class="contact-item">
+        <div class="contact-item-icon">[✉]</div>
+        <div>
+          <div class="contact-item-label">Email</div>
+          <div class="contact-item-value">jetroubeka@gmail.com</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">[◎]</div>
+        <div>
+          <div class="contact-item-label">Lycée</div>
+          <div class="contact-item-value">Lycée Léonard de Vinci</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">[⌂]</div>
+        <div>
+          <div class="contact-item-label">Formation</div>
+          <div class="contact-item-value">BTS SIO SISR — 1ère année</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">[▶]</div>
+        <div>
+          <div class="contact-item-label">LinkedIn / GitHub</div>
+          <div class="contact-item-value" style="color: var(--text-dim);">À compléter</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>PORTFOLIO — <span>JADE ETROUBEKA</span> — BTS SIO SISR — LYCÉE LÉONARD DE VINCI — <span>2026 - 2027</span></p>
+</footer>
+
+<script>
+
+  function openLightbox(img) {
+    document.getElementById('lightbox-img').src = img.src;
+    document.getElementById('lightbox').classList.add('active');
+    event.stopPropagation();
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+  }
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => 
